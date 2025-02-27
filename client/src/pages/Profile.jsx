@@ -3,8 +3,9 @@ import { useState } from "react";
 import {updateUserStart,updateUserSuccess,updateUserFailure} from '../redux/user/userSlice';
 import { useDispatch } from "react-redux";
 export default function Profile() {
-  const {currentUser} = useSelector((state) => state.user);
+  const {currentUser, loading, error } = useSelector((state) => state.user);
   const [formData,setFormData] = useState({});
+  const [updateSuccess,setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -28,6 +29,7 @@ export default function Profile() {
         return;
       }
       dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
     }
     catch(error){
       dispatch(updateUserFailure(error.message))
@@ -47,6 +49,8 @@ export default function Profile() {
         <span className="text-red-700 cursor-pointer">Delete account</span>
         <span className="text-red-700 cursor-pointer">Sign out</span>
       </div>
+      <p className="text-red-700 mt-5">{error ? error : ''}</p>
+      <p className="text-green-700 mt-5">{updateSuccess ? 'User is updated successfully' : ''}</p>
     </div>
   )
 }
